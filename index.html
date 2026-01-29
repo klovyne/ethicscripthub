@@ -33,21 +33,33 @@
             min-height: 100vh;
         }
 
-        /* SEARCH BAR */
         .searchbar {
     width: 520px;
     max-width: 80vw;
     height: 46px;
     padding: 0 20px 0 44px;
-    border-radius: 12px; /* was pill shape */
+
+    background: #181818;          /* DARK BACK */
+    border: 1px solid #2A2A2A;
+    border-radius: 12px;
+
+    color: #EAEAEA;
+    font-size: 14px;
+    outline: none;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    transition: all 0.2s ease;
 }
 
+.searchbar::placeholder {
+    color: #6E6E6E;
+}
 
-        .searchbar:focus {
-            border-color: var(--searchbar-focus);
-            box-shadow: 0 0 0 2px #2A2A2A;
-            background-color: var(--surface2);
-        }
+.searchbar:focus {
+    border-color: #3A3A3A;
+    background: #1F1F1F;
+    box-shadow: 0 0 0 2px rgba(58,58,58,0.4);
+}
 
         .searchbar::placeholder { color: var(--text-muted); }
 
@@ -435,5 +447,6 @@
     </script>
 </body>
 </html>
+
 
 
