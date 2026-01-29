@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethic Scripts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bgcolor: #0F0F0F;
+            --surface: #181818;
+            --surface2: #1F1F1F;
+            --border: #2A2A2A;
+            --border-hover: #3A3A3A;
+
+            --text-main: #FFFFFF;
+            --text-secondary: #CFCFCF;
+            --text-muted: #6E6E6E;
+
+            --searchbar-bg: rgba(24,24,24,0.9);
+            --searchbar-border: #2A2A2A;
+            --searchbar-focus: #3A3A3A;
+
+            --card-bg: #181818;
+            --copy-hover: #242424;
+            --copy-active: #2A2A2A;
+        }
+
+        body {
+            background-color: var(--bgcolor);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* SEARCH BAR */
+        .searchbar {
+            background-color: var(--searchbar-bg);
+            border: 1px solid var(--searchbar-border);
+            border-radius: 9999px;
+            position: fixed;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            padding: 14px 24px 14px 50px;
+            color: var(--text-main);
+            outline: none;
+            width: 400px;
+            max-width: 90%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            font-size: 0.95rem;
+        }
+
+        .searchbar:focus {
+            border-color: var(--searchbar-focus);
+            box-shadow: 0 0 0 2px #2A2A2A;
+            background-color: var(--surface2);
+        }
+
+        .searchbar::placeholder { color: var(--text-muted); }
+
+        .search-icon {
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        /* SCRIPT CARDS */
+        .script {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            height: 100%;
+        }
+
+        .script:hover {
+            transform: translateY(-6px);
+            background-color: var(--surface2);
+            border-color: var(--border-hover);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+        }
+
+        .script img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .script-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .script h3 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .game-name { color: var(--text-secondary); font-size: 0.9rem; }
+        .views { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* TAGS */
+        .tag {
+            padding: 4px 10px;
+            background-color: #1C1C1C;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .tag:hover { background-color: #242424; }
+
+        /* COPY BUTTON */
+        .copy {
+            margin-top: auto;
+            padding: 12px 16px;
+            background-color: #141414;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .copy:hover {
+            background-color: var(--copy-hover);
+            color: var(--text-main);
+            border-color: var(--border-hover);
+        }
+
+        .copy:active { background-color: var(--copy-active); }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(180deg, #1A1A1A, #0F0F0F);
+            padding: 80px 0 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* FLOAT BUTTON */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #1F1F1F;
+            border: 1px solid var(--border);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+        }
+
+        .floating-btn:hover { background-color: #242424; }
+
+        /* LOADER */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #1F1F1F;
+            border-radius: 50%;
+            border-top-color: #FFFFFF;
+            animation: spin 1s linear infinite;
+            margin: 60px auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Ethic Scripts</h1>
+</div>
+
+    
+    <div class="relative">
+        <div class="search-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <input class="searchbar" placeholder="Search scripts...">
+    </div>
+    
+    <div class="container mx-auto px-4 pb-12">
+        <div class="scriptscontainer grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Scripts will be loaded here -->
+        </div>
+    </div>
+
+    <div class="floating-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        const proxies = [
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.codetabs.com/v1/proxy/?quest=',
+            'https://thingproxy.freeboard.io/fetch/'
+        ];
+        
+        let page = 1;
+        let loading = false;
+        let proxy = 0;
+
+        async function load(scripts) {
+            const container = document.querySelector('.scriptscontainer');
+            container.innerHTML = '<div class="col-span-full"><div class="loading-spinner"></div></div>';
+            
+            try {
+                const url = 'https://scriptblox.com/api/script/fetch';
+                const response = await fetch(proxies[proxy] + url);
+                const jsdata = await response.json();
+                
+                if (jsdata?.result?.scripts) {
+                    addscript(jsdata.result.scripts);
+                }
+            } catch (error) {
+                console.log('Swapping proxy');
+                proxy = (proxy + 1) % proxies.length;
+                await load();
+            }
+        }
+
+        async function loadpage(page = 2) {
+            const container = document.querySelector('.scriptscontainer');
+            loading = true;
+            
+            // Add loading indicator at the bottom
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'col-span-full';
+            loadingIndicator.innerHTML = '<div class="loading-spinner"></div>';
+            container.appendChild(loadingIndicator);
+            
+            try {
+                const url = `https://scriptblox.com/api/script/fetch?page=${page}`;
+                const response = await fetch(proxies[proxy] + url);
+                const jsdata = await response.json();
+                
+                // Remove loading indicator
+                container.removeChild(loadingIndicator);
+                
+                if (jsdata?.result?.scripts?.length > 0) {
+                    addscript(jsdata.result.scripts, true);
+                } else {
+                    const endMessage = document.createElement('div');
+                    endMessage.className = 'col-span-full py-8 text-center text-gray-400';
+                    endMessage.textContent = "You've reached the end 🚀";
+                    container.appendChild(endMessage);
+                }
+            } catch (error) {
+                console.log('Swapping proxy');
+                proxy = (proxy + 1) % proxies.length;
+                await loadpage(page);
+            } finally {
+                loading = false;
+            }
+        }
+
+        function addscript(scripts, append = false) {
+            const container = document.querySelector('.scriptscontainer');
+            
+            if (!append) {
+                container.innerHTML = '';
+            }
+            
+            scripts.forEach(script => {
+                const raw = script.image;
+                const imageUrl = raw 
+                    ? (raw.startsWith('http') ? raw : `https://scriptblox.com${raw}`)
+                    : 'https://placehold.co/600x400/232323/808080?text=No+Image';
+                
+                const card = document.createElement('div');
+                card.className = 'script fade-in';
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="${script.title || 'Script'}">
+                    <div class="script-content">
+                        <h3>${script.title || 'Unknown Script'}</h3>
+                        <div class="game-name">
+                            <i class="fas fa-gamepad text-xs opacity-60"></i>
+                            ${script.game.name || 'Unknown Game'}
+                        </div>
+                        <div class="views">
+                            <i class="fas fa-eye text-xs opacity-60"></i>
+                            ${script.views ? script.views.toLocaleString() + ' views' : 'Unknown views'}
+                        </div>
+                        ${script.tags?.length ? `<div class="mt-2">${script.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+                        <button class="copy" data-script="${encodeURIComponent(script.script)}">
+                            <i class="far fa-copy"></i> Copy Script
+                        </button>
+                    </div>`;
+                
+                container.appendChild(card);
+            });
+        }
+
+        document.addEventListener('click', async (e) => {
+            if (e.target.closest('.copy')) {
+                const button = e.target.closest('.copy');
+                const encodedScript = button.getAttribute('data-script');
+                const fullScript = decodeURIComponent(encodedScript);
+                const originalContent = button.innerHTML;
+                
+                try {
+                    await navigator.clipboard.writeText(fullScript);
+                    
+                    // Update button to show success
+                    button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    button.style.borderColor = '#4ade80';
+                    button.style.color = '#4ade80';
+                    button.style.boxShadow = '0 4px 15px rgba(74, 222, 128, 0.3)';
+                    
+                    // Revert after 2 seconds
+                    setTimeout(() => {
+                        button.innerHTML = originalContent;
+                        button.style.borderColor = '';
+                        button.style.color = '';
+                        button.style.boxShadow = '';
+                    }, 2000);
+                } catch (error) {
+                    console.error('Copy error:', error);
+                    button.innerHTML = '<i class="fas fa-times"></i> Failed';
+                    button.style.borderColor = '#f87171';
+                    button.style.color = '#f87171';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalContent;
+                        button.style.borderColor = '';
+                        button.style.color = '';
+                    }, 2000);
+                }
+            }
+        });
+
+        const searchbar = document.querySelector('.searchbar');
+        let searchTimeout;
+        
+        searchbar.addEventListener('input', async (e) => {
+            clearTimeout(searchTimeout);
+            const content = e.target.value.trim();
+            const container = document.querySelector('.scriptscontainer');
+            
+            if (!content) {
+                await load();
+                return;
+            }
+            
+            container.innerHTML = '<div class="col-span-full"><div class="loading-spinner"></div></div>';
+            
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const searchUrl = `https://scriptblox.com/api/script/search?q=${encodeURIComponent(content)}`;
+                    const answer = await fetch(proxies[proxy] + searchUrl);
+                    
+                    if (!answer.ok) {
+                        throw new Error('Search fetch error');
+                    }
+                    
+                    const data = await answer.json();
+                    
+                    if (data?.result?.scripts?.length > 0) {
+                        addscript(data.result.scripts);
+                    } else {
+                        container.innerHTML = `
+                            <div class="empty-state col-span-full">
+                                <i class="fas fa-search mb-4 text-4xl opacity-30"></i>
+                                <p>No scripts found for "${content}"</p>
+                                <p class="text-sm mt-2 opacity-50">Try different keywords</p>
+                            </div>`;
+                    }
+                } catch (error) {
+                    console.error("Search error:", error);
+                    proxy = (proxy + 1) % proxies.length;
+                    
+                    // Retry with new proxy
+                    setTimeout(() => {
+                        searchbar.dispatchEvent(new Event('input'));
+                    }, 500);
+                }
+            }, 500);
+        });
+
+        // Show/hide floating button based on scroll position
+        window.addEventListener('scroll', function() {
+            const floatingBtn = document.querySelector('.floating-btn');
+            if (window.scrollY > 300) {
+                floatingBtn.style.opacity = '1';
+                floatingBtn.style.visibility = 'visible';
+                floatingBtn.style.transform = 'translateY(0)';
+            } else {
+                floatingBtn.style.opacity = '0';
+                floatingBtn.style.visibility = 'hidden';
+                floatingBtn.style.transform = 'translateY(20px)';
+            }
+        });
+
+        // Initial load
+        load();
+        
+        // Infinite scroll
+        window.addEventListener('scroll', async () => {
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const documentHeight = document.body.offsetHeight;
+            const threshold = 200;
+            
+            if (scrollPosition >= documentHeight - threshold && !loading) {
+                page += 1;
+                await loadpage(page);
+            }
+        });
+    </script>
+</body>
+</html>
